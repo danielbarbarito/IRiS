@@ -20,9 +20,10 @@ def alert():
 	if form.validate_on_submit():
 		alert_name = form.alert_name.data
 		alert_value = form.alert_value.data
-
+		alert_status = form.alert_status.data
+		alert_comments = form.alert_comments.data
 		#mongoalchemy
-		iris_db.insert(Alert(alert_name=alert_name,alert_value=alert_value))
+		iris_db.insert(Alert(alert_name=alert_name,alert_value=alert_value,alert_status=alert_status,alert_comments=alert_comments))
 		return redirect(url_for('alert'))
 	return render_template('alert.html', 
 				title='Alert',

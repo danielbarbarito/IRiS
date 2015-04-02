@@ -7,6 +7,8 @@ class Alert(Document):
 
 	alert_name = StringField()
 	alert_value = StringField()
+	alert_status = StringField()
+	alert_comments = StringField()
 
 	def __str__(self):
 		return '%s %s' % (self.alert_name, self.last_name)
