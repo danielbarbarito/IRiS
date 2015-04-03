@@ -13,6 +13,17 @@ class Alert(Document):
 	def __str__(self):
 		return '%s %s' % (self.alert_name, self.last_name)
 
+
+class Incident(Document):
+	config_collection_name = 'incident'
+	
+	incident_name = StringField()
+	incident_value = StringField()
+	incident_status = StringField()
+	incident_comments = StringField()
+
+	
+
 iris_db = Session.connect('iris_db')
 
 #will clear collection when python  run.py
