@@ -2,16 +2,21 @@ from mongoalchemy.session import Session
 from mongoalchemy.document import Document, Index
 from mongoalchemy.fields import *
 
+
 class Alert(Document):
 	config_collection_name = 'alert'
 
-	alert_name = StringField()
-	alert_value = StringField()
+	alert_title = StringField()
 	alert_status = StringField()
-	alert_comments = StringField()
+	alert_type = ListField(AnythingField())
+#	alert_generated = DateTimeField()
+	alert_entered = DateTimeField()
+	alert_ip = ListField(AnythingField())
+        alert_mac = ListField(AnythingField())
+	alert_comments = ListField(AnythingField())
 
 	def __str__(self):
-		return '%s %s' % (self.alert_name, self.last_name)
+		return '%s %s %s' % (self.alert_title, self.alert_status,self.alert_ip)
 
 
 class Incident(Document):
