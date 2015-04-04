@@ -23,7 +23,12 @@ def alert():
 			selected = request.form.getlist('selected')
 			return redirect(url_for('update_alert', selected=selected))
 		elif request.form['btn'] == 'Promote':
-			print 'promote'
+			selected = request.form.getlist('selected')
+			for s in selected:
+				query = iris_db.query(Alert).filter(Alert.alert_title == s)
+				for q in query:
+					iris_db.insert(Incident(incident_name=q.alert_title, incident_value="test", incident_status="Manual",incident_comments="test"))
+					iris_db.remove(q)
 	
 	return render_template('alert.html', 
 				title='Alert',
@@ -84,6 +89,7 @@ def update_alert():
 	form= UpdateAlertForm()
 
 	selected = request.args.getlist('selected')
+	print selected
 	for s in selected:
 		query = iris_db.query(Alert).filter(Alert.alert_title == s)
 		for q in query:
