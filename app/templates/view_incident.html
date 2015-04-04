@@ -1,0 +1,45 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
+	<thead class="fixedHeader">
+		<tr>
+			<th></th>
+			<th>Status</th>
+			<th>Type</th>
+			<th>Title</th>
+			<th>IP</th>
+			<th>MAC</th>
+			<th>Date Entered</th>
+			<th>Comments</th>
+		</tr>
+	</thead>
+	<tbody class="scrollContent">
+		{% for i in incidents %}
+			<tr>
+				<td><input type=checkbox name=selected value="{{ i.incident_title }}"></td>
+				<td>{{ i.incident_status }}</td>
+				<td>
+					{% for a in i.incident_type %}
+						{{ a }}
+					{% endfor %}
+				</td>
+				<td>{{ i.incident_title }}</td>
+				<td>
+					{% for a in i.incident_ip %}
+						{{ a }}
+					{% endfor %}
+				</td>
+				<td>
+					{% for a in i.incident_mac %}
+						{{ a }}
+					{% endfor %}
+				</td>
+				<td>{{ i.incident_entered }}</td>
+				<td>
+					{% for a in i.incident_comments %}
+						{{ a }}
+					{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+

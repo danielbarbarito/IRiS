@@ -18,9 +18,9 @@ class UpdateAlertForm(Form):
         alert_comments = TextAreaField('Comments')
 
 class IncidentForm(Form):
-	incident_name = StringField('incident_name', validators=[DataRequired()])
-	incident_value = StringField('incident_value', validators=[DataRequired()])
-	incident_status = SelectField('incident_status', choices = [('manual','Manual'),('linked','Linked')])
-	incident_comments = TextAreaField('incident_comments')
-
-
+	incident_title = StringField('Title',validators=[DataRequired()])
+	incident_type = StringField('Type',validators=[DataRequired()])
+	incident_ip = StringField('IP Address',validators=[Optional(),IPAddress("Bad IP Address")])
+	incident_mac = StringField('MAC Address',validators=[Optional(), MacAddress("Bad Mac Address")])
+	incident_comments = TextAreaField('Comments')
+		

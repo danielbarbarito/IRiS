@@ -22,10 +22,14 @@ class Alert(Document):
 class Incident(Document):
 	config_collection_name = 'incident'
 	
-	incident_name = StringField()
-	incident_value = StringField()
+	incident_title = StringField()
 	incident_status = StringField()
-	incident_comments = StringField()
+	incident_type = ListField(AnythingField())
+	#incident_generated = DateTimeField()
+	incident_entered = DateTimeField()
+	incident_ip = ListField(AnythingField())
+	incident_mac = ListField(AnythingField())
+	incident_comments = ListField(AnythingField())
 
 	
 
@@ -33,3 +37,4 @@ iris_db = Session.connect('iris_db')
 
 #will clear collection when python  run.py
 #iris_db.clear_collection(Alert)
+#iris_db.clear_collection(Incident)

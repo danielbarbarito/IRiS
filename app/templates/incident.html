@@ -3,43 +3,13 @@
 {% block content %}
 	<div>
 		<h1>Incidents</h1>
-		<div id="tableContainer" class="tableContainer">	
-			<table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
-				<thead class="fixedHeader">
-					<tr>
-						<th>Incident Name</th>
-						<th>Description</th>
-						<th>Status</th>
-						<th>Comments</th>
-					</tr>
-				</thead>
-				<tbody class="scrollContent">
-						{% for i in incidents %}
-					<tr>
-						<td>{{ i.incident_name }}</td>
-						<td>{{ i.incident_value }}</td>
-						<td>{{ i.incident_status }}</td>
-						<td>{{ i.incident_comments }}</td>
-					</tr>
-						{% endfor %}
-				</tbody>
-		</table>
-		</div>
-		<br><br><br>
-
-		<h1>Enter Incident</h1>
-		<form action="" method="post" name="login">
-			{{ form.hidden_tag() }}
-			<dl>			
-				<dd>{{ form.incident_status }}
-				<dt>Enter Incident Name:
-				<dd>{{ form.incident_name(size=24) }}
-				<dt>Enter Incident Value:
-				<dd>{{ form.incident_value(size=24) }}
-				<dt> Enter Comments:
-				<dd>{{ form.incident_comments }}
-				<dd><input type="submit" value="Submit">
-			</dl>
+		<form action="" method=post>
+			<div id="tableContainer" class="tableContainer">
+				{% include 'view_incident.html' %}
+			</div>
+			<div><input type="submit" name='btn' value="New"></div>
+			<div><input type="submit" name='btn' value="Update"></div>
+		
 		</form>
 	</div>
 {% endblock %}

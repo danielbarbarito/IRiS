@@ -27,7 +27,15 @@ def alert():
 			for s in selected:
 				query = iris_db.query(Alert).filter(Alert.alert_title == s)
 				for q in query:
-					iris_db.insert(Incident(incident_name=q.alert_title, incident_value="test", incident_status="Manual",incident_comments="test"))
+					iris_db.insert(Incident(
+						       	incident_title=q.alert_title,
+							incident_ip=q.alert_ip,
+							incident_mac=q.alert_mac,
+							incident_entered=q.alert_entered,
+							incident_comments=q.alert_comments,
+							incident_status="Manual",
+							incident_type=q.alert_type
+							))
 					iris_db.remove(q)
 	
 	return render_template('alert.html', 
@@ -71,12 +79,22 @@ def incident():
 	incidents = iris_db.query(Incident)
 
 	if form.validate_on_submit():
-		incident_name = form.incident_name.data
-		incident_value = form.incident_value.data
+		incident_title = form.incident_title.data
+		incident_ip = form.incident_ip.data
+		incident_mac = form.incident_mac.data
+		incident_entered = form.incident_entered.data
+		incident_type = form.incident_type.data
 		incident_status = form.incident_status.data
 		incident_comments = form.incident_comments.data
 
-		iris_db.insert(Incident(incident_name=incident_name, incident_value=incident_value, incident_status=incident_status, incident_comments=incident_comments))
+		iris_db.insert(Incident(incident_title=incident_title,
+					incident_ip=incident_ip,
+					incident_mac=incident_mac,
+					incident_type=incident_type,
+					incident_status=incident_status,
+					incident_entered=incident_entered, 
+					incident_comments=incident_comments))
+
 		return redirect(url_for('incident'))
 	return render_template('incident.html',
 				title='Incident',
