@@ -1,0 +1,45 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%" class="scrollTable">
+	<thead class="fixedHeader">
+		<tr>
+			<th></th>
+			<th>Status</th>
+			<th>Type</th>
+			<th>Title</th>
+			<th>IP</th>
+			<th>MAC</th>
+			<th>Date Entered</th>
+			<th>Comments</th>
+		</tr>
+	</thead>
+	<tbody class="scrollContent">
+		{% for a in incidents %}
+			<tr>
+				<td><input type=radio name=update value="{{ a.incident_title }}"></td>
+				<td>{{ a.incident_status }}</td>
+				<td>
+					{% for i in a.incident_type %}
+						{{ i }}
+					{% endfor %}
+				</td>
+				<td>{{ a.incident_title }}</td>
+				<td>
+					{% for i in a.incident_ip %}
+						{{ i }}
+					{% endfor %}
+				</td>
+				<td>
+					{% for i in a.incident_mac %}
+						{{ i }}
+					{% endfor %}
+				</td>
+				<td>{{ a.incident_entered }}</td>
+				<td>
+					{% for i in a.incident_comments %}
+						{{ i }}
+					{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+

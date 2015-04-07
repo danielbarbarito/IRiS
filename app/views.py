@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from datetime import datetime
 from app import app
-from forms import NewAlertForm, UpdateAlertForm, IncidentForm
+from forms import NewAlertForm, UpdateAlertForm, NewIncidentForm, UpdateIncidentForm
 from models import Alert, Incident, iris_db
 
 @app.route('/')
@@ -33,7 +33,7 @@ def alert():
 							incident_mac=q.alert_mac,
 							incident_entered=q.alert_entered,
 							incident_comments=q.alert_comments,
-							incident_status="Manual",
+							incident_status="Promoted",
 							incident_type=q.alert_type
 							))
 					iris_db.remove(q)
@@ -71,34 +71,6 @@ def new_alert():
 
         return render_template("new_alert.html",
                                 title='New Alert',
-				form=form)
-
-@app.route('/incident', methods=['GET', 'POST'])
-def incident():
-	form = IncidentForm()
-	incidents = iris_db.query(Incident)
-
-	if form.validate_on_submit():
-		incident_title = form.incident_title.data
-		incident_ip = form.incident_ip.data
-		incident_mac = form.incident_mac.data
-		incident_entered = form.incident_entered.data
-		incident_type = form.incident_type.data
-		incident_status = form.incident_status.data
-		incident_comments = form.incident_comments.data
-
-		iris_db.insert(Incident(incident_title=incident_title,
-					incident_ip=incident_ip,
-					incident_mac=incident_mac,
-					incident_type=incident_type,
-					incident_status=incident_status,
-					incident_entered=incident_entered, 
-					incident_comments=incident_comments))
-
-		return redirect(url_for('incident'))
-	return render_template('incident.html',
-				title='Incident',
-				incidents=incidents,
 				form=form)
 
 @app.route('/update_alert', methods=['GET', 'POST'])
@@ -160,4 +132,116 @@ def update_alert():
                                 title='Update Alert',
 				form=form,
 				alerts=alerts)
+
+@app.route('/incident', methods=['GET', 'POST'])
+def incident():
+	
+	incidents = iris_db.query(Incident)
+
+	if request.method == 'POST':
+		if request.form['btn'] == 'New':
+			return redirect(url_for('new_incident'))
+		elif request.form['btn'] == 'Update':
+			selected = request.form.getlist('selected')
+			return redirect(url_for('update_incident', selected=selected))
+	
+	return render_template('incident.html', 
+				title='Incident',
+				incidents=incidents)
+
+
+		#return redirect(url_for('incident'))
+	#return render_template('incident.html',
+	#			title='Incident',
+	#			incidents=incidents,
+	#			form=form)
+
+@app.route('/new_incident', methods=['GET', 'POST'])
+def new_incident():
+	form = NewIncidentForm()
+        #mongoalchemy
+        #alerts = session.query(Alert).filter(Alert.alert_name == 'Second_Alert')       
+	if form.validate_on_submit():
+                incident_title = form.incident_title.data
+                incident_ip = [form.incident_ip.data]
+                incident_mac = [form.incident_mac.data]
+                incident_type = [form.incident_type.data]
+                incident_entered = datetime.utcnow()
+                incident_comments = [form.incident_comments.data]
+		
+                #mongoalchemy
+                iris_db.insert(Incident(incident_title=incident_title,
+                                        incident_ip=incident_ip,
+                                        incident_mac=incident_mac,
+                                        incident_status="Manual",
+                                        incident_type=incident_type,
+                                        incident_comments=incident_comments,
+                                        incident_entered=incident_entered))
+                return redirect(url_for('incident'))
+
+
+        return render_template("new_incident.html",
+                                title='New Incident',
+				form=form)
+
+@app.route('/update_incident', methods=['GET', 'POST'])
+def update_incident():
+	incidents = []
+	form= UpdateIncidentForm()
+
+	selected = request.args.getlist('selected')
+	print selected
+	for s in selected:
+		query = iris_db.query(Incident).filter(Incident.incident_title == s)
+		for q in query:
+			d = {
+				'incident_title':q.incident_title,
+				'incident_status':q.incident_status,
+				'incident_type':q.incident_type,
+				'incident_ip':q.incident_ip,
+				'incident_mac':q.incident_mac,
+				'incident_entered':q.incident_entered,
+				'incident_comments':q.incident_comments,
+				}
+		incidents.append(d)
+
+	if request.method == 'POST':
+		update = request.form.getlist('update')
+	
+		if update:
+		
+			incident = iris_db.query(Incident).filter(Incident.incident_title == update[0])
+			if form.validate_on_submit():
+	    	        	incident_ip = form.incident_ip.data
+        		        incident_mac = form.incident_mac.data
+				incident_type = form.incident_type.data
+		                incident_comments = form.incident_comments.data
+				incident_status = form.incident_status.data
+			
+				if incident_status != '':
+                                        incident.set(Incident.incident_status,incident_status).execute()
+
+				if incident_type != '':
+                                        incident.extend(Incident.incident_type,incident_type).execute()
+
+				if incident_ip != '':
+					incident.extend(Incident.incident_ip,incident_ip).execute()
+				
+				if incident_mac != '':
+                                        incident.extend(Incident.incident_mac,incident_mac).execute()
+
+				if incident_comments != '':
+                                        incident.extend(Incident.incident_comments,incident_comments).execute()
+		
+				incidents = iris_db.query(Incident)	
+				#fix boxes not clearing
+				return render_template("update_incident.html",
+			                                title='Update Incident',
+                        			        form=form,
+			                                incidents=incidents)
+	return render_template("update_incident.html",
+                                title='Update Incident',
+				form=form,
+				incidents=incidents)
+
 
