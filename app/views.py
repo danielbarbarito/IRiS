@@ -15,6 +15,7 @@ def index():
 def alert():
 
 	alerts = iris_db.query(Alert)
+	incident_alerts = []
 
 	if request.method == 'POST':
 		if request.form['btn'] == 'New':
@@ -27,16 +28,20 @@ def alert():
 			for s in selected:
 				query = iris_db.query(Alert).filter(Alert.alert_title == s)
 				for q in query:
-					iris_db.insert(Incident(
-						       	incident_title=q.alert_title,
-							incident_ip=q.alert_ip,
-							incident_mac=q.alert_mac,
-							incident_entered=q.alert_entered,
-							incident_comments=q.alert_comments,
-							incident_status="Promoted",
-							incident_type=q.alert_type
-							))
-					iris_db.remove(q)
+					incident_alerts.append(q.to_ref())				
+					#iris_db.remove(q)
+
+			
+			iris_db.insert(Incident(
+				incident_title=q.alert_title,
+				incident_ip=q.alert_ip,
+				incident_mac=q.alert_mac,
+				incident_entered=q.alert_entered,
+				incident_comments=q.alert_comments,
+				incident_status="Promoted",
+				incident_type=q.alert_type,
+				incident_alerts=incident_alerts
+				))
 	
 	return render_template('alert.html', 
 				title='Alert',
@@ -168,7 +173,9 @@ def new_incident():
                 incident_type = [form.incident_type.data]
                 incident_entered = datetime.utcnow()
                 incident_comments = [form.incident_comments.data]
-		
+		incident_alerts = []
+
+				
                 #mongoalchemy
                 iris_db.insert(Incident(incident_title=incident_title,
                                         incident_ip=incident_ip,
@@ -176,7 +183,9 @@ def new_incident():
                                         incident_status="Manual",
                                         incident_type=incident_type,
                                         incident_comments=incident_comments,
-                                        incident_entered=incident_entered))
+                                        incident_entered=incident_entered,
+					incident_alerts=incident_alerts)
+					)
                 return redirect(url_for('incident'))
 
 

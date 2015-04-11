@@ -30,7 +30,8 @@ class Incident(Document):
 	incident_ip = ListField(AnythingField())
 	incident_mac = ListField(AnythingField())
 	incident_comments = ListField(AnythingField())
-
+	
+	incident_alerts = ListField(RefField(type=DocumentField(Alert)))
 	
 
 iris_db = Session.connect('iris_db')
@@ -38,3 +39,4 @@ iris_db = Session.connect('iris_db')
 #will clear collection when python  run.py
 #iris_db.clear_collection(Alert)
 #iris_db.clear_collection(Incident)
+
