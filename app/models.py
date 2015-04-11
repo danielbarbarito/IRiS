@@ -6,32 +6,34 @@ from mongoalchemy.fields import *
 class Alert(Document):
 	config_collection_name = 'alert'
 
-	alert_title = StringField()
-	alert_status = StringField()
-	alert_type = ListField(AnythingField())
+	title = StringField()
+	status = StringField()
+	atype = ListField(AnythingField())
 #	alert_generated = DateTimeField()
-	alert_entered = DateTimeField()
-	alert_ip = ListField(AnythingField())
-        alert_mac = ListField(AnythingField())
-	alert_comments = ListField(AnythingField())
+	entered = DateTimeField()
+	ip = ListField(AnythingField())
+        mac = ListField(AnythingField())
+	comments = ListField(AnythingField())
 
 	def __str__(self):
-		return '%s %s %s' % (self.alert_title, self.alert_status,self.alert_ip)
+		return '%s %s %s' % (self.title, self.status,self.ip)
 
 
 class Incident(Document):
 	config_collection_name = 'incident'
 	
-	incident_title = StringField()
-	incident_status = StringField()
-	incident_type = ListField(AnythingField())
+	#incident_title = StringField()
+	status = StringField()
+	idNum = StringField()
+	itype = ListField(AnythingField())
 	#incident_generated = DateTimeField()
-	incident_entered = DateTimeField()
-	incident_ip = ListField(AnythingField())
-	incident_mac = ListField(AnythingField())
-	incident_comments = ListField(AnythingField())
+	entered = DateTimeField()
+	#incident_ip = ListField(AnythingField())
+	#incident_mac = ListField(AnythingField())
 	
-	incident_alerts = ListField(RefField(type=DocumentField(Alert)))
+	comments = ListField(AnythingField())
+	
+	alerts = ListField(RefField(type=DocumentField(Alert)))
 	
 
 iris_db = Session.connect('iris_db')

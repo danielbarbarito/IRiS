@@ -1,0 +1,40 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+{% block content %}
+<div>
+               <h1>New Alert</h1>
+                <form action="" method="post" name="login">
+                        {{ form.hidden_tag() }}
+                        <div>
+                                {{ form.atype.label }}{{ form.atype(size=24) }}
+                                {% for error in form.atype.errors %}
+                                        <span style="color: red;">[{{error}}]</span>
+                                {% endfor %}<br>
+                        </div>
+                        <div>
+                                {{ form.title.label }}{{ form.title(size=24) }}
+                                {% for error in form.title.errors %}
+                                        <span style="color: red;">[{{error}}]</span>
+                                {% endfor %}<br>
+                        </div>
+                        <div>
+                                {{ form.ip.label }}{{ form.ip(size=24) }}
+                                {% for error in form.ip.errors %}
+                                        <span style="color: red;">[{{error}}]</span>
+                                {% endfor %}<br>
+                        </div>
+                        <div>
+                                {{ form.mac.label }}{{ form.mac(size=24) }}
+                                {% for error in form.mac.errors %}
+                                        <span style="color: red;">[{{error}}]</span>
+                                {% endfor %}<br>
+                        </div>
+                        <div>
+                                {{ form.comments.label }}{{ form.comments }}
+                        </div>
+                        <div><input type="submit" value="Submit"></div>
+
+                </form>
+        </div>
+{% endblock %}
+

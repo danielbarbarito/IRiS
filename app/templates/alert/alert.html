@@ -2,13 +2,14 @@
 {% extends "base.html" %}
 {% block content %}
 	<div>
-		<h1>Incidents</h1>
+		<h1>Alerts</h1>
 		<form action="" method=post>
 			<div id="tableContainer" class="tableContainer">
-				{% include 'view_incident.html' %}
+				{% include 'alert/view_alert.html' %}
 			</div>
 			<div><input type="submit" name='btn' value="New"></div>
 			<div><input type="submit" name='btn' value="Update"></div>
+			<div><input type="submit" name='btn' value="Promote"></div>
 		
 		</form>
 	</div>

@@ -2,35 +2,41 @@
 {% extends "base.html" %}
 {% block content %}
 <div>
-               <h1>New Alert</h1>
-                <form action="" method="post" name="login">
+                <h1>Update Alerts</h1>
+                <form action="" method=post>
+			<div id="tableContainer" class="tableContainer">
+				{% include 'alert/update_alert_table.html' %}
+			</div>
+
+              
                         {{ form.hidden_tag() }}
+			<div>
+                                {{ form.status.label }}{{ form.status }}
+                                {% for error in form.status.errors %}
+                                        <span style="color: red;">[{{error}}]</span>
+                                {% endfor %}<br>
+                        </div>
+
                         <div>
-                                {{ form.alert_type.label }}{{ form.alert_type(size=24) }}
-                                {% for error in form.alert_type.errors %}
+                                {{ form.atype.label }}{{ form.atype(size=24) }}
+                                {% for error in form.atype.errors %}
+                                        <span style="color: red;">[{{error}}]</span>
+                                {% endfor %}<br>
+                        </div>
+                         <div>
+                                {{ form.ip.label }}{{ form.ip(size=24) }}
+                                {% for error in form.ip.errors %}
                                         <span style="color: red;">[{{error}}]</span>
                                 {% endfor %}<br>
                         </div>
                         <div>
-                                {{ form.alert_title.label }}{{ form.alert_title(size=24) }}
-                                {% for error in form.alert_title.errors %}
+                                {{ form.mac.label }}{{ form.mac(size=24) }}
+                                {% for error in form.mac.errors %}
                                         <span style="color: red;">[{{error}}]</span>
                                 {% endfor %}<br>
                         </div>
                         <div>
-                                {{ form.alert_ip.label }}{{ form.alert_ip(size=24) }}
-                                {% for error in form.alert_ip.errors %}
-                                        <span style="color: red;">[{{error}}]</span>
-                                {% endfor %}<br>
-                        </div>
-                        <div>
-                                {{ form.alert_mac.label }}{{ form.alert_mac(size=24) }}
-                                {% for error in form.alert_mac.errors %}
-                                        <span style="color: red;">[{{error}}]</span>
-                                {% endfor %}<br>
-                        </div>
-                        <div>
-                                {{ form.alert_comments.label }}{{ form.alert_comments }}
+                                {{ form.comments.label }}{{ form.comments }}
                         </div>
                         <div><input type="submit" value="Submit"></div>
 

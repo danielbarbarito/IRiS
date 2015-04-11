@@ -15,7 +15,7 @@ def index():
 def alert():
 
 	alerts = iris_db.query(Alert)
-	incident_alerts = []
+	#alerts = []
 
 	if request.method == 'POST':
 		if request.form['btn'] == 'New':
@@ -26,24 +26,22 @@ def alert():
 		elif request.form['btn'] == 'Promote':
 			selected = request.form.getlist('selected')
 			for s in selected:
-				query = iris_db.query(Alert).filter(Alert.alert_title == s)
+				query = iris_db.query(Alert).filter(Alert.title == s)
 				for q in query:
-					incident_alerts.append(q.to_ref())				
+					alerts.append(q.to_ref())				
 					#iris_db.remove(q)
 
 			
 			iris_db.insert(Incident(
-				incident_title=q.alert_title,
-				incident_ip=q.alert_ip,
-				incident_mac=q.alert_mac,
-				incident_entered=q.alert_entered,
-				incident_comments=q.alert_comments,
-				incident_status="Promoted",
-				incident_type=q.alert_type,
-				incident_alerts=incident_alerts
+				title=q.title,
+				entered=q.entered,
+				comments=q.comments,
+				status="Promoted",
+				itype=q.itype,
+				alerts=alerts
 				))
 	
-	return render_template('alert.html', 
+	return render_template('alert/alert.html', 
 				title='Alert',
 				alerts=alerts)
 
@@ -52,29 +50,29 @@ def alert():
 def new_alert():
 	form = NewAlertForm()
         #mongoalchemy
-        #alerts = session.query(Alert).filter(Alert.alert_name == 'Second_Alert')       
+        #alerts = session.query(Alert).filter(Alert.name == 'Second_Alert')       
 	new = 'New'
 	if form.validate_on_submit():
-                alert_title = form.alert_title.data
-                alert_ip = [form.alert_ip.data]
-                alert_mac = [form.alert_mac.data]
-                alert_type = [form.alert_type.data]
-                alert_entered = datetime.utcnow()
-                alert_comments = [form.alert_comments.data]
+                title = form.title.data
+                ip = [form.ip.data]
+                mac = [form.mac.data]
+                atype = [form.atype.data]
+                entered = datetime.utcnow()
+                comments = [form.comments.data]
 		
-		print alert_title
+		print title
                 #mongoalchemy
-                iris_db.insert(Alert(alert_title=alert_title,
-                                        alert_ip=alert_ip,
-                                        alert_mac=alert_mac,
-                                        alert_status=new,
-                                        alert_type=alert_type,
-                                        alert_comments=alert_comments,
-                                        alert_entered=alert_entered))
+                iris_db.insert(Alert(title=title,
+                                        ip=ip,
+                                        mac=mac,
+                                        status=new,
+                                        atype=atype,
+                                        comments=comments,
+                                        entered=entered))
                 return redirect(url_for('alert'))
 
 
-        return render_template("new_alert.html",
+        return render_template("alert/new_alert.html",
                                 title='New Alert',
 				form=form)
 
@@ -86,16 +84,16 @@ def update_alert():
 	selected = request.args.getlist('selected')
 	print selected
 	for s in selected:
-		query = iris_db.query(Alert).filter(Alert.alert_title == s)
+		query = iris_db.query(Alert).filter(Alert.title == s)
 		for q in query:
 			d = {
-				'alert_title':q.alert_title,
-				'alert_status':q.alert_status,
-				'alert_type':q.alert_type,
-				'alert_ip':q.alert_ip,
-				'alert_mac':q.alert_mac,
-				'alert_entered':q.alert_entered,
-				'alert_comments':q.alert_comments,
+				'title':q.title,
+				'status':q.status,
+				'atype':q.atype,
+				'ip':q.ip,
+				'mac':q.mac,
+				'entered':q.entered,
+				'comments':q.comments,
 				}
 		alerts.append(d)
 
@@ -104,36 +102,36 @@ def update_alert():
 	
 		if update:
 		
-			alert = iris_db.query(Alert).filter(Alert.alert_title == update[0])
+			alert = iris_db.query(Alert).filter(Alert.title == update[0])
 			if form.validate_on_submit():
-	    	        	alert_ip = form.alert_ip.data
-        		        alert_mac = form.alert_mac.data
-				alert_type = form.alert_type.data
-		                alert_comments = form.alert_comments.data
-				alert_status = form.alert_status.data
+	    	        	ip = form.ip.data
+        		        mac = form.mac.data
+				atype = form.atype.data
+		                comments = form.comments.data
+				status = form.status.data
 			
-				if alert_status != '':
-                                        alert.set(Alert.alert_status,alert_status).execute()
+				if status != '':
+                                        alert.set(Alert.status,status).execute()
 
-				if alert_type != '':
-                                        alert.extend(Alert.alert_type,alert_type).execute()
+				if atype != '':
+                                        alert.extend(Alert.atype,atype).execute()
 
-				if alert_ip != '':
-					alert.extend(Alert.alert_ip,alert_ip).execute()
+				if ip != '':
+					alert.extend(Alert.ip,ip).execute()
 				
-				if alert_mac != '':
-                                        alert.extend(Alert.alert_mac,alert_mac).execute()
+				if mac != '':
+                                        alert.extend(Alert.mac,mac).execute()
 
-				if alert_comments != '':
-                                        alert.extend(Alert.alert_comments,alert_comments).execute()
+				if comments != '':
+                                        alert.extend(Alert.comments,comments).execute()
 		
 				alerts = iris_db.query(Alert)	
 				#fix boxes not clearing
-				return render_template("update_alert.html",
+				return render_template("alert/update_alert.html",
 			                                title='Update Alert',
                         			        form=form,
 			                                alerts=alerts)
-	return render_template("update_alert.html",
+	return render_template("alert/update_alert.html",
                                 title='Update Alert',
 				form=form,
 				alerts=alerts)
@@ -164,27 +162,20 @@ def incident():
 @app.route('/new_incident', methods=['GET', 'POST'])
 def new_incident():
 	form = NewIncidentForm()
-        #mongoalchemy
-        #alerts = session.query(Alert).filter(Alert.alert_name == 'Second_Alert')       
 	if form.validate_on_submit():
-                incident_title = form.incident_title.data
-                incident_ip = [form.incident_ip.data]
-                incident_mac = [form.incident_mac.data]
-                incident_type = [form.incident_type.data]
-                incident_entered = datetime.utcnow()
-                incident_comments = [form.incident_comments.data]
-		incident_alerts = []
+                title = form.title.data
+                itype = form.itype.data
+                entered = datetime.utcnow()
+                comments = [form.comments.data]
+		alerts = []
 
 				
-                #mongoalchemy
-                iris_db.insert(Incident(incident_title=incident_title,
-                                        incident_ip=incident_ip,
-                                        incident_mac=incident_mac,
-                                        incident_status="Manual",
-                                        incident_type=incident_type,
-                                        incident_comments=incident_comments,
-                                        incident_entered=incident_entered,
-					incident_alerts=incident_alerts)
+                iris_db.insert(Incident(title=title,
+                                        status="Manual",
+                                        itype=itype,
+                                        comments=comments,
+                                        entered=entered,
+					alerts=alerts)
 					)
                 return redirect(url_for('incident'))
 
@@ -201,16 +192,14 @@ def update_incident():
 	selected = request.args.getlist('selected')
 	print selected
 	for s in selected:
-		query = iris_db.query(Incident).filter(Incident.incident_title == s)
+		query = iris_db.query(Incident).filter(Incident.title == s)
 		for q in query:
 			d = {
-				'incident_title':q.incident_title,
-				'incident_status':q.incident_status,
-				'incident_type':q.incident_type,
-				'incident_ip':q.incident_ip,
-				'incident_mac':q.incident_mac,
-				'incident_entered':q.incident_entered,
-				'incident_comments':q.incident_comments,
+				'title':q.title,
+				'status':q.status,
+				'itype':q.itype,
+				'entered':q.entered,
+				'comments':q.comments,
 				}
 		incidents.append(d)
 
@@ -219,28 +208,20 @@ def update_incident():
 	
 		if update:
 		
-			incident = iris_db.query(Incident).filter(Incident.incident_title == update[0])
+			incident = iris_db.query(Incident).filter(Incident.title == update[0])
 			if form.validate_on_submit():
-	    	        	incident_ip = form.incident_ip.data
-        		        incident_mac = form.incident_mac.data
-				incident_type = form.incident_type.data
-		                incident_comments = form.incident_comments.data
-				incident_status = form.incident_status.data
+				itype = form.itype.data
+		                comments = form.comments.data
+				status = form.status.data
 			
-				if incident_status != '':
-                                        incident.set(Incident.incident_status,incident_status).execute()
+				if status != '':
+                                        incident.set(Incident.status,status).execute()
 
-				if incident_type != '':
-                                        incident.extend(Incident.incident_type,incident_type).execute()
+				if itype != '':
+                                        incident.extend(Incident.itype,itype).execute()
 
-				if incident_ip != '':
-					incident.extend(Incident.incident_ip,incident_ip).execute()
-				
-				if incident_mac != '':
-                                        incident.extend(Incident.incident_mac,incident_mac).execute()
-
-				if incident_comments != '':
-                                        incident.extend(Incident.incident_comments,incident_comments).execute()
+				if comments != '':
+                                        incident.extend(Incident.comments,comments).execute()
 		
 				incidents = iris_db.query(Incident)	
 				#fix boxes not clearing
