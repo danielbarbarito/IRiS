@@ -1,8 +1,11 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 from datetime import datetime
 from app import app
 from forms import NewAlertForm, UpdateAlertForm, NewIncidentForm, UpdateIncidentForm
 from models import Alert, Incident, iris_db
+from werkzeug import secure_filename
+import os
+
 
 @app.route('/')
 @app.route('/index')
@@ -126,7 +129,7 @@ def update_alert():
                                         alert.extend(Alert.comments,comments).execute()
 		
 				alerts = iris_db.query(Alert)	
-				#fix boxes not clearing
+				#note: fix boxes not clearing
 				return render_template("alert/update_alert.html",
 			                                title='Update Alert',
                         			        form=form,
@@ -224,7 +227,7 @@ def update_incident():
                                         incident.extend(Incident.comments,comments).execute()
 		
 				incidents = iris_db.query(Incident)	
-				#fix boxes not clearing
+				#note: fix boxes not clearing
 				return render_template("incident/update_incident.html",
 			                                title='Update Incident',
                         			        form=form,
@@ -233,5 +236,24 @@ def update_incident():
                                 title='Update Incident',
 				form=form,
 				incidents=incidents)
+
+def allowed_file(filename):
+	return '.' in filename and \
+		filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+
+
+@app.route('/upload_file', methods=['GET', 'POST'])
+def upload_file():
+	if request.method == 'POST':
+		file = request.files['file']
+		if file and allowed_file(file.filename):
+			filename = secure_filename(file.filename)
+			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			flash('Upload Complete')
+			return redirect(url_for('upload_file'))
+		else:
+			flash('Upload Error: Check File Type')
+	return render_template('upload_file.html',
+				title='Upload File')
 
 
