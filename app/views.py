@@ -148,7 +148,7 @@ def incident():
 			selected = request.form.getlist('selected')
 			return redirect(url_for('update_incident', selected=selected))
 	
-	return render_template('incident.html', 
+	return render_template('incident/incident.html', 
 				title='Incident',
 				incidents=incidents)
 
@@ -180,7 +180,7 @@ def new_incident():
                 return redirect(url_for('incident'))
 
 
-        return render_template("new_incident.html",
+        return render_template("incident/new_incident.html",
                                 title='New Incident',
 				form=form)
 
@@ -225,11 +225,11 @@ def update_incident():
 		
 				incidents = iris_db.query(Incident)	
 				#fix boxes not clearing
-				return render_template("update_incident.html",
+				return render_template("incident/update_incident.html",
 			                                title='Update Incident',
                         			        form=form,
 			                                incidents=incidents)
-	return render_template("update_incident.html",
+	return render_template("incident/update_incident.html",
                                 title='Update Incident',
 				form=form,
 				incidents=incidents)

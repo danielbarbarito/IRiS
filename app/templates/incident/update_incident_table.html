@@ -14,27 +14,13 @@
 	<tbody class="scrollContent">
 		{% for a in incidents %}
 			<tr>
-				<td><input type=radio name=update value="{{ a.incident_title }}"></td>
-				<td>{{ a.incident_status }}</td>
+				<td><input type=radio name=update value="{{ a.title }}"></td>
+				<td>{{ a.status }}</td>
+				<td>{{ a.itype }}</td>
+				<td>{{ a.title }}</td>
+				<td>{{ a.entered }}</td>
 				<td>
-					{% for i in a.incident_type %}
-						{{ i }}
-					{% endfor %}
-				</td>
-				<td>{{ a.incident_title }}</td>
-				<td>
-					{% for i in a.incident_ip %}
-						{{ i }}
-					{% endfor %}
-				</td>
-				<td>
-					{% for i in a.incident_mac %}
-						{{ i }}
-					{% endfor %}
-				</td>
-				<td>{{ a.incident_entered }}</td>
-				<td>
-					{% for i in a.incident_comments %}
+					{% for i in a.comments %}
 						{{ i }}
 					{% endfor %}
 				</td>

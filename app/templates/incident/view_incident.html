@@ -14,27 +14,28 @@
 	<tbody class="scrollContent">
 		{% for i in incidents %}
 			<tr>
-				<td><input type=checkbox name=selected value="{{ i.incident_title }}"></td>
-				<td>{{ i.incident_status }}</td>
+				<td><input type=checkbox name=selected value="{{ i.title }}"></td>
+				<td>{{ i.status }}</td>
+				<td>{{ i.itype }}</td>
+			<!--	<td>
+					{% for a in i.itype %}
+						{{ a }}
+					{% endfor %}
+				</td> -->
+				<td>{{ i.title }}</td>
 				<td>
-					{% for a in i.incident_type %}
+					{% for a in i.ip %}
 						{{ a }}
 					{% endfor %}
 				</td>
-				<td>{{ i.incident_title }}</td>
 				<td>
-					{% for a in i.incident_ip %}
+					{% for a in i.mac %}
 						{{ a }}
 					{% endfor %}
 				</td>
+				<td>{{ i.entered }}</td>
 				<td>
-					{% for a in i.incident_mac %}
-						{{ a }}
-					{% endfor %}
-				</td>
-				<td>{{ i.incident_entered }}</td>
-				<td>
-					{% for a in i.incident_comments %}
+					{% for a in i.comments %}
 						{{ a }}
 					{% endfor %}
 				</td>

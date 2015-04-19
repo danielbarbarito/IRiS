@@ -11,29 +11,14 @@
               
                         {{ form.hidden_tag() }}
 			<div>
-                                {{ form.incident_status.label }}{{ form.incident_status }}
+                                {{ form.status.label }}{{ form.status }}
                         </div>
 
                         <div>
-                                {{ form.incident_type.label }}{{ form.incident_type(size=24) }}
-                                {% for error in form.incident_type.errors %}
-                                        <span style="color: red;">[{{error}}]</span>
-                                {% endfor %}<br>
-                        </div>
-                         <div>
-                                {{ form.incident_ip.label }}{{ form.incident_ip(size=24) }}
-                                {% for error in form.incident_ip.errors %}
-                                        <span style="color: red;">[{{error}}]</span>
-                                {% endfor %}<br>
+                                {{ form.itype.label }}{{ form.itype }}
                         </div>
                         <div>
-                                {{ form.incident_mac.label }}{{ form.incident_mac(size=24) }}
-                                {% for error in form.incident_mac.errors %}
-                                        <span style="color: red;">[{{error}}]</span>
-                                {% endfor %}<br>
-                        </div>
-                        <div>
-                                {{ form.incident_comments.label }}{{ form.incident_comments }}
+                                {{ form.comments.label }}{{ form.comments }}
                         </div>
                         <div><input type="submit" value="Submit"></div>
 

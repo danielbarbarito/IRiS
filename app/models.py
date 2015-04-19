@@ -23,9 +23,11 @@ class Incident(Document):
 	config_collection_name = 'incident'
 	
 	#incident_title = StringField()
+	title = StringField()
 	status = StringField()
-	idNum = StringField()
-	itype = ListField(AnythingField())
+	##idNum = StringField()
+	itype = StringField()
+	#itype = ListField(AnythingField())
 	#incident_generated = DateTimeField()
 	entered = DateTimeField()
 	#incident_ip = ListField(AnythingField())
@@ -35,6 +37,7 @@ class Incident(Document):
 	
 	alerts = ListField(RefField(type=DocumentField(Alert)))
 	
+
 
 iris_db = Session.connect('iris_db')
 
