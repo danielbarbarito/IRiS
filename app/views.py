@@ -5,7 +5,9 @@ from forms import NewAlertForm, UpdateAlertForm, NewIncidentForm, UpdateIncident
 from models import Alert, Incident, iris_db
 from werkzeug import secure_filename
 import os
+import csv
 
+header = ['title','status','atype','entered','ip','mac','comments']
 
 @app.route('/')
 @app.route('/index')
@@ -241,6 +243,27 @@ def allowed_file(filename):
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
+def parse_upload(directory, filename):
+	#note: not taking into account that ip,mac,... can be a list or our we forcing one value one column for this
+	with open(directory+'/'+filename) as f:
+		records = csv.DictReader(f)
+		for r in records:
+			title = r['title']
+			status = r['status']
+			ip =  [r['ip']]	
+			mac = [r['mac']]
+			atype = [r['atype']]
+			entered = datetime.utcnow()
+			comments = [r['comments']]
+
+			iris_db.insert(Alert(title=title,
+						ip=ip,
+						mac=mac,
+						status=status,
+						atype=atype,
+						comments=comments,
+						entered=entered))
+
 
 @app.route('/upload_file', methods=['GET', 'POST'])
 def upload_file():
@@ -250,6 +273,7 @@ def upload_file():
 			filename = secure_filename(file.filename)
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 			flash('Upload Complete')
+			parse_upload(app.config['UPLOAD_FOLDER'], filename)
 			return redirect(url_for('upload_file'))
 		else:
 			flash('Upload Error: Check File Type')
