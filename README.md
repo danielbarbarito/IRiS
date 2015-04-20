@@ -33,26 +33,36 @@ Installation
 ------------
 
 Install MongoDb
+
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
 echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+
 sudo apt-get update
+
 sudo apt-get install -y mongodb-org
 
 Start MongoDB
+
 sudo service mongod start
-mongo
 
 
-Install Flask and related packages
+# Install Flask and related packages
+
 sudo apt-get install python-pip
+
 sudo pip install Flask
+
 sudo pip install flask-wtf
+
 sudo pip install MongoAlchemy
 
+sudo pip install Flask-PyMongo
+
 Download IRiS from github
+
 sudo git clone https://github.com/Car-RamRod/IRiS.git
 
-run web server:
+Run Web Server:
 run 'python run.py'
 
 Protocol
