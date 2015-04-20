@@ -32,7 +32,7 @@ and incidents through a web form and stores the data in a MongoDB.
 Installation
 ------------
 
-Install MongoDb
+*Install MongoDb*
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
 echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
@@ -41,12 +41,12 @@ sudo apt-get update
 
 sudo apt-get install -y mongodb-org
 
-Start MongoDB
+*Start MongoDB*
 
 sudo service mongod start
 
 
-# Install Flask and related packages
+*Install Flask and related packages*
 
 sudo apt-get install python-pip
 
@@ -62,7 +62,8 @@ Download IRiS from github
 
 sudo git clone https://github.com/Car-RamRod/IRiS.git
 
-Run Web Server:
+*Run Web Server*
+
 run 'python run.py'
 
 Protocol
