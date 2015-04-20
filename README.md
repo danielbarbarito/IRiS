@@ -58,7 +58,7 @@ sudo pip install MongoAlchemy
 
 sudo pip install Flask-PyMongo
 
-Download IRiS from github
+**Download IRiS from github**
 
 sudo git clone https://github.com/Car-RamRod/IRiS.git
 
